@@ -51,7 +51,7 @@ function SectionRouter({ children }: Props) {
 
         router.events.on('hashChangeStart', handleRouteChange)
         return () => { router.events.off('hashChangeStart', handleRouteChange) }
-    }, [handleRouteChange, router.asPath])
+    }, [handleRouteChange, router.asPath, router.events])
 
 
     return <>
