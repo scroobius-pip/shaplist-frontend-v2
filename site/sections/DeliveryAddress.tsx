@@ -6,7 +6,7 @@ import React from 'react'
 import { ChevronRight } from '@mui/icons-material';
 import { useRouter } from 'next/dist/client/router';
 
-const DeliveryAddress = () => {
+const DeliveryAddress = (props: { hash: string }) => {
     const router = useRouter()
 
     return <Section

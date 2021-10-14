@@ -25,7 +25,7 @@ const options = [
         value: 'pickup'
     }
 ]
-function DeliverySelect() {
+function DeliverySelect(props: { hash: string }) {
     const [option, setOption] = React.useState(options[0].value)
     return (
         <Section

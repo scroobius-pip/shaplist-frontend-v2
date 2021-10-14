@@ -5,7 +5,7 @@ import Section from 'components/Section'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 
-const CartDetails = () => {
+const CartDetails = (props: { hash: string }) => {
     const router = useRouter()
     return <Stack height='100%'  >
         <Section

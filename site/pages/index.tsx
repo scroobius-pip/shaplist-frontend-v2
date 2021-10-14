@@ -1,6 +1,6 @@
 import { Button, Container, ButtonGroup } from '@mui/material'
 import type { NextPage } from 'next'
-import { StoreIntro } from 'sections/StoreIntroSection'
+import  StoreIntro  from 'sections/StoreIntroSection'
 import React from 'react'
 import StoreCatalog from 'sections/StoreCatalogSection'
 import ProductDetails from 'sections/ProductDetailsSection'

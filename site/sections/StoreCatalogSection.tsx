@@ -5,7 +5,7 @@ import Section from 'components/Section';
 import { useRouter } from 'next/dist/client/router';
 import CartButton from 'components/CartButton';
 
-function StoreCatalog() {
+function StoreCatalog(props: { hash: string }) {
   const router = useRouter()
   return (<Stack>
     <Section

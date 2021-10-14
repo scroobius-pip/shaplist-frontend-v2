@@ -24,7 +24,7 @@ const options = [
 ]
 
 
-function PaymentSelect() {
+function PaymentSelect(props: { hash: string }) {
   const [option, setOption] = React.useState(options[0].value)
   const router = useRouter()
   return (<Section

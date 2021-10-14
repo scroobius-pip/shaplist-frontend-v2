@@ -27,7 +27,7 @@ const additions = [{
 }]
 
 
-function ProductDetails() {
+function ProductDetails(props: { hash: string }) {
   const [option, setOption] = React.useState(options[0].value)
   const [addition, setAddition] = React.useState([additions[0].value])
   const router = useRouter()

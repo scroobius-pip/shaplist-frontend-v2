@@ -6,7 +6,7 @@ import CustomButton from 'components/CustomButton';
 import { useRouter } from 'next/dist/client/router';
 import { ChevronRight } from '@mui/icons-material';
 
-const ContactDetails = () => {
+const ContactDetails = (props: { hash: string }) => {
     const router = useRouter()
 
     return <Section

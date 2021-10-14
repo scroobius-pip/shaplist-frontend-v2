@@ -7,7 +7,7 @@ import { SectionProps } from 'sections';
 import theme from 'styles/theme';
 
 
-export function StoreIntro() {
+function StoreIntro(props: { hash: string }) {
   const router = useRouter()
   return <Stack
     spacing={2}
@@ -49,3 +49,5 @@ export function StoreIntro() {
 
   </Stack>;
 }
+
+export default StoreIntro
