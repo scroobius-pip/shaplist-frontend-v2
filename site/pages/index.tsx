@@ -37,7 +37,6 @@ const Home: NextPage = () => {
           <PaymentSelect hash='payment' />
           <DeliverySelect hash='delivery' />
           <DeliveryAddress hash='address' />
-
           <ContactDetails hash='contact' />
           <Instructions hash='instructions' />
         </SectionRouter>

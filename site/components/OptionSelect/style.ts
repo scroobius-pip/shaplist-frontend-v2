@@ -10,6 +10,8 @@ export const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => 
         borderRadius: theme.shape.borderRadius,
         width: '100%',
         padding: '16.5px 14px',
+        marginLeft: 0,
+        marginRight: 0,
         border: `solid 1.6px transparent !important`,
         borderTop: 1.6,
         backgroundColor: theme.palette.background.paper,

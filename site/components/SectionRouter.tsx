@@ -19,8 +19,8 @@ const defaultStyle = {
 }
 
 const transitionStyles = {
-    entering: { opacity: 0 },
-    entered: { opacity: 1 },
+    entering: { opacity: 0, },
+    entered: { opacity: 1, },
     exiting: { opacity: 0 },
     exited: { opacity: 0 },
     unmounted: { opacity: 0 }
@@ -59,7 +59,7 @@ function SectionRouter({ children }: Props) {
             const hash = c.props.hash
             return <Transition key={hash} in={hash === currentPath} timeout={100} appear>
                 {state => (
-                    <div style={{ ...defaultStyle, ...transitionStyles[state], display: hash !== currentPath ? 'none' : 'block', width: '100%' }}>
+                    <div style={{ ...defaultStyle, ...transitionStyles[state], display: hash !== currentPath ? 'none' : 'block', width: '100%', position: 'relative' }}>
                         {c}
                     </div>
                 )}
