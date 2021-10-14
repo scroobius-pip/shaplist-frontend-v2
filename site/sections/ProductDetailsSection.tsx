@@ -7,21 +7,26 @@ import { useRouter } from 'next/dist/client/router';
 import FloatButton from 'components/FloatButton';
 import CustomButton from 'components/CustomButton';
 const options = [{
-  text: 'Vanilla Filling $40',
+  text: 'Vanilla Filling',
+  additionalText: '+$40',
   value: 'vanilla'
 }, {
-  text: 'Strawberry Filling $10',
+  text: 'Strawberry Filling',
+  additionalText: '+$10',
   value: 'strawberry'
 }]
 
 const additions = [{
   value: 'sprinkles',
-  text: 'Sprinkles (+$2)'
+  additionalText: '+$2',
+  text: 'Sprinkles'
 }, {
-  text: 'Jam (+$5)',
+  text: 'Jam',
+  additionalText: '+$5',
   value: 'jam'
 }, {
-  text: 'Nutella Spread (+$15)',
+  text: 'Nutella Spread',
+  additionalText: '+$15',
   value: 'nutella'
 
 }]

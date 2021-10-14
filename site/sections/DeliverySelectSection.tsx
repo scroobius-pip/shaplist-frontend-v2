@@ -9,22 +9,29 @@ import router from 'next/dist/client/router';
 
 const options = [
     {
-        text: 'Katampe Extension (+500 NGN)',
+        text: 'Katampe Extension',
+        price: '+500 NGN',
         value: 'card'
     },
     {
-        text: 'Gwarinpa Estate (+200 NGN)',
+        text: 'Gwarinpa Estate',
+        price: '+200 NGN',
         value: 'bank'
     },
     {
-        text: 'Maitama (+1500 NGN)',
+        text: 'Maitama',
+        price: '+1500 NGN',
         value: 'delivery'
     },
     {
         text: 'Pickup (free)',
+        price: 'FREE',
         value: 'pickup'
     }
 ]
+
+
+
 function DeliverySelect(props: { hash: string }) {
     const [option, setOption] = React.useState(options[0].value)
     return (

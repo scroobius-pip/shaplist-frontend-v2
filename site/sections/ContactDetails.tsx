@@ -11,6 +11,7 @@ const ContactDetails = (props: { hash: string }) => {
 
     return <Section
         heading='Contact Details'
+        subheading="We won't spam you, it's just for fulfilling your orders."
     >
         <Stack gap={5}>
 

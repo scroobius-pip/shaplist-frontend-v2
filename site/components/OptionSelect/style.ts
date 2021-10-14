@@ -2,9 +2,11 @@ import { ToggleButtonGroup, styled } from '@mui/material';
 
 export const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
     width: '100%',
+
     '& .MuiToggleButtonGroup-grouped': {
+        boxShadow: theme.shadows[1],
         fontWeight: 600,
-        margin: theme.spacing(0.5),
+        margin: theme.spacing(1),
         borderRadius: theme.shape.borderRadius,
         width: '100%',
         padding: '16.5px 14px',
@@ -21,7 +23,7 @@ export const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => 
         '&.Mui-selected': {
             backgroundColor: theme.palette.background.paper,
             border: `solid 1.6px ${theme.palette.primary.main} !important`
-        },
+        }
     },
 }));
 
