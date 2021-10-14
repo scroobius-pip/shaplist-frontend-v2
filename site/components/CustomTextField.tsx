@@ -3,10 +3,11 @@ import React from 'react';
 
 const StyledTextField = styled(OutlinedInput)(({ theme, multiline }) => ({
   width: '100%',
+  backgroundColor: theme.palette.background.paper,
   '& .MuiOutlinedInput-input': {
     textAlign: multiline ? 'left' : 'center',
     minHeight: multiline ? 100 : 'initial',
-    backgroundColor: theme.palette.background.paper,
+
     borderRadius: theme.shape.borderRadius,
     fontWeight: 600,
     padding: '16.5px 14px'
