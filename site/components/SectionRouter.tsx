@@ -44,16 +44,14 @@ function SectionRouter({ children }: Props) {
         setCurrentPath(nextPath)
     }
 
+
     useEffect(() => {
         const currentPath = router.asPath
-        handleRouteChange(currentPath)
-    }, [])
+        handleRouteChange(currentPath) //change route during initial render
 
-    useEffect(() => {
         router.events.on('hashChangeStart', handleRouteChange)
-
-        return () => { console.log('disposing'); router.events.off('hashChangeStart', handleRouteChange) }
-    }, [])
+        return () => { router.events.off('hashChangeStart', handleRouteChange) }
+    }, [handleRouteChange, router.asPath])
 
 
     return <>

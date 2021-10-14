@@ -9,15 +9,15 @@ import router from 'next/dist/client/router';
 
 const options = [
     {
-        text: 'Katampe Extension ($2)',
+        text: 'Katampe Extension (+500 NGN)',
         value: 'card'
     },
     {
-        text: 'Gwarinpa Estate ($1)',
+        text: 'Gwarinpa Estate (+200 NGN)',
         value: 'bank'
     },
     {
-        text: 'Maitama ($0.5)',
+        text: 'Maitama (+1500 NGN)',
         value: 'delivery'
     },
     {
@@ -30,6 +30,8 @@ function DeliverySelect(props: { hash: string }) {
     return (
         <Section
             heading='Select a delivery option'
+            headingStyle={{ component: 'h1', variant: 'h5' }}
+
         >
             <Stack gap={2}>
 

@@ -11,6 +11,7 @@ const CartDetails = (props: { hash: string }) => {
         <Section
             subheading='Update your items by tapping on them'
             heading='Your Cart'
+            headingStyle={{ component: 'h1', variant: 'h5' }}
         >
             <List  >
                 <CartItem onClick={() => router.push('#details?aaa')} />

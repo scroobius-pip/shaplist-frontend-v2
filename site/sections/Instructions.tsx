@@ -14,10 +14,10 @@ const Instructions = (props: Props) => {
 
     return <Section
         heading='Additional Instructions'
+        headingStyle={{ component: 'h1', variant: 'h5' }}
     >
         <Stack>
             <CustomTextField
-            
                 multiline
                 placeholder={`Do you have any comments or delivery instructions ? type them here`}
             />

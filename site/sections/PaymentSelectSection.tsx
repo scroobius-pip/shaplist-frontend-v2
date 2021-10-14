@@ -29,6 +29,7 @@ function PaymentSelect(props: { hash: string }) {
   const router = useRouter()
   return (<Section
     heading='How would you like to pay ?'
+    headingStyle={{ component: 'h1', variant: 'h5' }}
   >
     <Stack gap={2}>
 
