@@ -6,8 +6,13 @@ import { useRouter } from 'next/dist/client/router';
 import { SectionProps } from 'sections';
 import theme from 'styles/theme';
 
+interface Props {
+  backgroundUrl: string,
+  description: string,
+  hash: string
+}
 
-function StoreIntro(props: { hash: string }) {
+function StoreIntro(props: Props) {
   const router = useRouter()
   return <Stack
     spacing={2}
@@ -23,12 +28,9 @@ function StoreIntro(props: { hash: string }) {
       }}
     >
 
-      <StoreImage url='/food_background.jpg' />
+      <StoreImage url={props.backgroundUrl} />
       <Typography padding={5} textAlign='center' variant='body1'>
-        🤎 Custom orders taken through website. <br />
-        🤎 Closed for orders on Mondays. We can block out unavailable dates. <br />
-        🤎 Automatic cutoff date & time set. 3 days advance order. Order by 6pm each day. <br />
-        🤎 Inventory by date. If your item is sold out, please check other dates for availability.
+        {props.description}
       </Typography>
       <Box sx={{
         padding: 2,

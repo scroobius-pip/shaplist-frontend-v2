@@ -7,6 +7,7 @@ const theme = createTheme({
         borderRadius: 5
     },
     palette: {
+        mode: 'light',
         background: {
             paper: '#FFFF',
             default: '#F5F5F5'

@@ -1,0 +1,85 @@
+query Store($storeFromSlugSlug: String!) {
+  storeFromSlug(slug: $storeFromSlugSlug) {
+    ... on Store {
+      name
+      currency {
+        text
+        symbol
+      }
+      links {
+        name
+        value
+      }
+      description
+      imageUrl {
+        full
+        preview
+      }
+      slug
+      id
+      phone
+      contactChannel {
+        whatsapp_number
+        phone_number
+      }
+      products {
+        ... on ProductList {
+          list {
+            id
+            name
+            slug
+            description
+            imageUrl {
+              preview
+              full
+            }
+            status
+            limitedStock {
+              remaining
+              started
+            }
+            productAdditions {
+              name
+              price {
+                value
+              }
+            }
+            productOptions {
+              price {
+                value
+              }
+              imageUrl {
+                full
+                preview
+              }
+              name
+            }
+            price {
+              value
+            }
+          }
+        }
+        ... on Error {
+          code
+          message
+        }
+      }
+      deliveryOptions {
+        type
+        instructions
+        name
+        cost
+      }
+      paymentOptions {
+        type
+        value
+        name
+        instructions
+      }
+    }
+    ... on Error {
+      code
+      message
+    }
+  }
+}

@@ -11,7 +11,7 @@ interface Props {
     hash: string
 }
 const Instructions = (props: Props) => {
-
+    
     return <Section
         heading='Additional Instructions'
         headingStyle={{ component: 'h1', variant: 'h5' }}

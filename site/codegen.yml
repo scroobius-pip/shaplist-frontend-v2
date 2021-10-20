@@ -1,0 +1,11 @@
+overwrite: true
+schema: 'https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql'
+documents: 'graphql/**/*.graphql'
+generates:
+  generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-graphql-request'
+    config:
+      nonOptionalTypename: true

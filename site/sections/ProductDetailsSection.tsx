@@ -31,6 +31,9 @@ const additions = [{
 
 }]
 
+interface Props {
+  hash: string
+}
 
 function ProductDetails(props: { hash: string }) {
   const [option, setOption] = React.useState(options[0].value)
@@ -42,7 +45,7 @@ function ProductDetails(props: { hash: string }) {
       <img style={{
         aspectRatio: '1/1',
         objectFit: 'cover',
-        borderRadius: 10
+        // borderRadius: 10
       }} alt={'food sample'} width='100%' src={'/food_sample_1.jpg'} />
 
       <Typography gutterBottom variant='h5' textAlign='center' component='h1'>

@@ -1,6 +1,6 @@
 import { Button, Container, ButtonGroup } from '@mui/material'
-import type { NextPage } from 'next'
-import  StoreIntro  from 'sections/StoreIntroSection'
+import type { GetServerSideProps, NextPage } from 'next'
+import StoreIntro from 'sections/StoreIntroSection'
 import React from 'react'
 import StoreCatalog from 'sections/StoreCatalogSection'
 import ProductDetails from 'sections/ProductDetailsSection'
@@ -11,15 +11,29 @@ import DeliverySelect from 'sections/DeliverySelectSection'
 import DeliveryAddress from 'sections/DeliveryAddress'
 import ContactDetails from 'sections/ContactDetails'
 import Instructions from 'sections/Instructions'
+import { getSdk, Store, StoreQuery } from 'generated/graphql'
+import getStoreSlug from 'utils/getStoreSlug'
+import { GraphQLClient } from 'graphql-request'
+import { err, fromPromise, ok } from 'neverthrow'
+import Error from 'next/error'
+import { DStore } from 'types/types'
 
 
 
+export type IndexProps = {
+  store?: DStore
+  error?: string
+}
 
 
 
+const Home: NextPage<IndexProps> = ({ store, error }) => {
+  if (!store) {
+    return <Error statusCode={404} title={error} />
+  }
 
-const Home: NextPage = () => {
-  // todo - put a nice progress bar up top
+  const { imageUrl, description, products } = store
+
   return (
     <>
       <Container maxWidth='sm' sx={{
@@ -30,8 +44,14 @@ const Home: NextPage = () => {
         position: 'relative'
       }} >
         <SectionRouter>
-          <StoreIntro hash='/' />
-          <StoreCatalog hash='catalog' />
+          <StoreIntro
+            backgroundUrl={imageUrl?.full ?? ''}
+            description={description ?? ''}
+            hash='/' />
+          <StoreCatalog
+            store={store}
+            hash='catalog'
+          />
           <ProductDetails hash='details' />
           <CartDetails hash='cart' />
           <PaymentSelect hash='payment' />
@@ -40,10 +60,50 @@ const Home: NextPage = () => {
           <ContactDetails hash='contact' />
           <Instructions hash='instructions' />
         </SectionRouter>
-
       </Container>
     </>
   )
+}
+
+
+export const getServerSideProps: GetServerSideProps<IndexProps> = async (context) => {
+
+  const getStoreInfo = getStoreSlug(context.req)
+    .mapErr(e => e.message)
+    .asyncAndThen(storeSlug => {
+      const client = new GraphQLClient('https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql')
+      const sdk = getSdk(client)
+      const storeQueryResult = fromPromise(sdk.Store({ storeFromSlugSlug: storeSlug }), _ => 'Failed to get store')
+      return storeQueryResult
+    })
+    .andThen<IndexProps['store'], string>(storeQueryResult => {
+      switch (storeQueryResult.storeFromSlug?.__typename) {
+        case 'Store':
+          return ok(storeQueryResult.storeFromSlug)
+        case 'Error':
+          return err(storeQueryResult.storeFromSlug.message)
+        default:
+          return err('Unknown Error Occurred')
+      }
+    })
+    .match<IndexProps>(result => {
+      return {
+        store: result
+      }
+    }, error => {
+      return {
+        error
+      }
+    })
+
+
+
+
+  return {
+    props: {
+      ...await getStoreInfo
+    }
+  }
 }
 
 export default Home
