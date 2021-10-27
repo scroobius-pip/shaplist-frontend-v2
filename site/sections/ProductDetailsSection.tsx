@@ -1,75 +1,66 @@
 import { Box, Button, Card, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { OptionInput, SelectInput } from 'components/OptionSelect';
 import { QuantitySelect } from 'components/QuantitySelectInput';
 import Section from '../components/Section';
 import { useRouter } from 'next/dist/client/router';
 import FloatButton from 'components/FloatButton';
 import CustomButton from 'components/CustomButton';
-const options = [{
-  text: 'Vanilla Filling',
-  additionalText: '+$40',
-  value: 'vanilla'
-}, {
-  text: 'Strawberry Filling',
-  additionalText: '+$10',
-  value: 'strawberry'
-}]
-
-const additions = [{
-  value: 'sprinkles',
-  additionalText: '+$2',
-  text: 'Sprinkles'
-}, {
-  text: 'Jam',
-  additionalText: '+$5',
-  value: 'jam'
-}, {
-  text: 'Nutella Spread',
-  additionalText: '+$15',
-  value: 'nutella'
-
-}]
-
+import CartContext from 'context/CartContext'
+import StoreContext from 'context/StoreContext';
+import ComponentWithError from 'components/ComponentWithError';
 interface Props {
   hash: string
+  data?: { id: string }
 }
 
-function ProductDetails(props: { hash: string }) {
-  const [option, setOption] = React.useState(options[0].value)
-  const [addition, setAddition] = React.useState([additions[0].value])
+function ProductDetails(props: Props) {
+
   const router = useRouter()
+  const cart = React.useContext(CartContext)
+  const store = React.useContext(StoreContext)
 
-  return (<Stack gap={4} >
-    <Box>
-      <img style={{
-        aspectRatio: '1/1',
-        objectFit: 'cover',
-        // borderRadius: 10
-      }} alt={'food sample'} width='100%' src={'/food_sample_1.jpg'} />
 
-      <Typography gutterBottom variant='h5' textAlign='center' component='h1'>
-        Basque Burnt Cheesecake
-      </Typography>
-      <Typography gutterBottom variant='body1' textAlign='center'>
-        Cheese Cake description
-      </Typography>
-    </Box>
-    <Section headingStyle={{ variant: 'h6', component: 'h2' }} heading='Select an option'>
-      <OptionInput value={option} options={options} onChange={setOption} />
-    </Section>
-    <Section headingStyle={{ variant: 'h6', component: 'h2' }} heading='Additions'>
-      <SelectInput value={addition} options={additions} onChange={setAddition} />
-    </Section>
-    <FloatButton>
 
-      <Card variant='elevation' elevation={12} sx={{ padding: 1 }}>
-        <QuantitySelect />
-        <CustomButton onClick={() => router.push('#catalog')} >Add to Cart</CustomButton>
+  return <ComponentWithError
+    data={store.store?.products}
+    errorComponent={<></>}
+  >
+    {(products) => {
+      const product = products.list.find(p => props.data?.id === p.id)
+      return <Stack gap={4} >
+        <Box>
+          {!!product?.imageUrl?.length && <img style={{
+            aspectRatio: '1/1',
+            objectFit: 'cover',
+            // borderRadius: 10
+          }} alt={product?.name} width='100%' src={product?.imageUrl?.[0]?.full} />}
 
-      </Card>
-    </FloatButton>
-  </Stack>);
+          <Typography gutterBottom variant='h5' textAlign='center' component='h1'>
+            {product?.name}
+          </Typography>
+          <Typography gutterBottom variant='body1' textAlign='center'>
+            {product?.description}
+          </Typography>
+        </Box>
+        {/* <Section headingStyle={{ variant: 'h6', component: 'h2' }} heading='Select an option'>
+          <OptionInput value={cart.state.items} options={product?.productOptions} onChange={setOption} />
+        </Section>
+        <Section headingStyle={{ variant: 'h6', component: 'h2' }} heading='Additions'>
+          <SelectInput value={addition} options={additions} onChange={setAddition} />
+        </Section> */}
+        <FloatButton>
+
+          <Card variant='elevation' elevation={12} sx={{ padding: 1 }}>
+            <QuantitySelect />
+            <CustomButton onClick={() => router.push('#catalog')} >Add to Cart</CustomButton>
+
+          </Card>
+        </FloatButton>
+      </Stack>
+    }}
+  </ComponentWithError>
 }
 
 export default ProductDetails
+

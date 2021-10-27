@@ -1,5 +1,5 @@
 import { err, fromThrowable, ok, Result } from 'neverthrow'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 interface ProductCartState {
     productId: string
     quantity: number
@@ -22,12 +22,12 @@ interface CartState {
 }
 
 
-const defaultCartState = {
+export const defaultCartState = {
     items: {},
     paymentOptionId: '',
     deliveryAddress: '',
     phoneNumber: '',
-    fullName: '',
+    fullName: 'simdi',
     email: '',
     instructions: '',
     deliveryOptionId: ''
@@ -53,7 +53,7 @@ const cartToString = (cart: CartState): Result<string, null> => {
     return fromThrowable(JSON.stringify, _ => null)(cart)
 }
 
-export default () => {
+export const useCart = () => {
     const [state, setState] = useState<CartState>(defaultCartState)
 
     useEffect(() => {
@@ -108,4 +108,16 @@ export default () => {
     }
 }
 
+interface CartHook {
+    addUpdateItem: (product: ProductCartState, cartId?: string) => void;
+    deleteItem: (cartId: string) => void;
+    updateDetail: <T extends "paymentOptionId" | "deliveryOptionId" | "deliveryAddress" | "phoneNumber" | "fullName" | "email" | "instructions">(key: T, value: CartState[T]) => void;
+    state: CartState;
+}
 
+export default React.createContext<CartHook>({
+    addUpdateItem: () => { },
+    deleteItem: () => { },
+    updateDetail: () => { },
+    state: defaultCartState
+})

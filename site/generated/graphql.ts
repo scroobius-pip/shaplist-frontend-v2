@@ -120,19 +120,21 @@ export type CurrencyResult = Currency | Error;
 export type DeliveryOption = {
   __typename: 'DeliveryOption';
   cost?: Maybe<Scalars['Float']>;
+  fulfillment: FulfillmentType;
   instructions?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  type: DeliveryType;
+  payment: DeliveryPaymentType;
 };
 
 export type DeliveryOptionInput = {
   cost?: Maybe<Scalars['Float']>;
+  fulfillment: FulfillmentType;
   instructions?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  type: DeliveryType;
+  payment: DeliveryPaymentType;
 };
 
-export enum DeliveryType {
+export enum DeliveryPaymentType {
   Quote = 'QUOTE',
   SetPrice = 'SET_PRICE'
 }
@@ -170,6 +172,11 @@ export enum ErrorCode {
   InvalidInput = 'INVALID_INPUT',
   NotFound = 'NOT_FOUND',
   SystemError = 'SYSTEM_ERROR'
+}
+
+export enum FulfillmentType {
+  Delivery = 'DELIVERY',
+  Pickup = 'PICKUP'
 }
 
 export type IdObject = {
@@ -431,6 +438,7 @@ export type OrderResult = Error | Order;
 
 export enum OrderStatus {
   CustomerPendingCheckout = 'CUSTOMER_PENDING_CHECKOUT',
+  MerchantArchived = 'MERCHANT_ARCHIVED',
   MerchantCancelled = 'MERCHANT_CANCELLED',
   MerchantDelivered = 'MERCHANT_DELIVERED',
   MerchantDispatching = 'MERCHANT_DISPATCHING',
@@ -628,6 +636,19 @@ export type StoreInput = {
   statesSupported?: Maybe<Array<Scalars['ID']>>;
 };
 
+export type StoreList = {
+  __typename: 'StoreList';
+  list: Array<StoreListItem>;
+};
+
+export type StoreListItem = {
+  __typename: 'StoreListItem';
+  id: Scalars['ID'];
+  slug: Scalars['String'];
+};
+
+export type StoreListResult = Error | StoreList;
+
 export type StoreResult = Error | Store;
 
 export type StringObj = {
@@ -644,7 +665,7 @@ export type User = {
   location?: Maybe<Location>;
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
-  store?: Maybe<StoreResult>;
+  store?: Maybe<StoreListResult>;
 };
 
 export type UserInput = {
@@ -661,12 +682,13 @@ export type StoreQueryVariables = Exact<{
 }>;
 
 
-export type StoreQuery = { __typename: 'Query', storeFromSlug: { __typename: 'Error', code: ErrorCode, message: string } | { __typename: 'Store', name: string, description?: string | null | undefined, slug: string, id: string, phone?: string | null | undefined, currency?: { __typename: 'Currency', text: string, symbol: string } | null | undefined, links?: Array<{ __typename: 'Link', name: string, value: string }> | null | undefined, imageUrl?: { __typename: 'ImageUrl', full: string, preview: string } | null | undefined, contactChannel?: { __typename: 'ContactChannel', whatsapp_number?: string | null | undefined, phone_number?: string | null | undefined } | null | undefined, products?: { __typename: 'Error', code: ErrorCode, message: string } | { __typename: 'ProductList', list: Array<{ __typename: 'Product', id: string, name: string, slug: string, description: string, status: ProductStatus, imageUrl?: Array<{ __typename: 'ImageUrl', preview: string, full: string }> | null | undefined, limitedStock?: { __typename: 'Stock', remaining?: number | null | undefined, started?: number | null | undefined } | null | undefined, productAdditions?: Array<{ __typename: 'ProductAddition', name: string, price?: { __typename: 'Price', value: number } | null | undefined }> | null | undefined, productOptions?: Array<{ __typename: 'ProductOption', name: string, price?: { __typename: 'Price', value: number } | null | undefined, imageUrl?: { __typename: 'ImageUrl', full: string, preview: string } | null | undefined }> | null | undefined, price?: { __typename: 'Price', value: number } | null | undefined }> } | null | undefined, deliveryOptions?: Array<{ __typename: 'DeliveryOption', type: DeliveryType, instructions?: string | null | undefined, name: string, cost?: number | null | undefined }> | null | undefined, paymentOptions?: Array<{ __typename: 'PaymentOption', type: PaymentType, value: string, name: string, instructions: string }> | null | undefined } };
+export type StoreQuery = { __typename: 'Query', storeFromSlug: { __typename: 'Error', code: ErrorCode, message: string } | { __typename: 'Store', name: string, description?: string | null | undefined, slug: string, id: string, phone?: string | null | undefined, currency?: { __typename: 'Currency', text: string, symbol: string } | null | undefined, links?: Array<{ __typename: 'Link', name: string, value: string }> | null | undefined, imageUrl?: { __typename: 'ImageUrl', full: string, preview: string } | null | undefined, contactChannel?: { __typename: 'ContactChannel', whatsapp_number?: string | null | undefined, phone_number?: string | null | undefined } | null | undefined, products?: { __typename: 'Error', code: ErrorCode, message: string } | { __typename: 'ProductList', list: Array<{ __typename: 'Product', id: string, name: string, slug: string, description: string, status: ProductStatus, imageUrl?: Array<{ __typename: 'ImageUrl', preview: string, full: string }> | null | undefined, limitedStock?: { __typename: 'Stock', remaining?: number | null | undefined, started?: number | null | undefined } | null | undefined, productAdditions?: Array<{ __typename: 'ProductAddition', name: string, price?: { __typename: 'Price', value: number } | null | undefined }> | null | undefined, productOptions?: Array<{ __typename: 'ProductOption', name: string, price?: { __typename: 'Price', value: number } | null | undefined, imageUrl?: { __typename: 'ImageUrl', full: string, preview: string } | null | undefined }> | null | undefined, price?: { __typename: 'Price', value: number } | null | undefined }> } | null | undefined, deliveryOptions?: Array<{ __typename: 'DeliveryOption', fulfillment: FulfillmentType, payment: DeliveryPaymentType, instructions?: string | null | undefined, name: string, cost?: number | null | undefined }> | null | undefined, paymentOptions?: Array<{ __typename: 'PaymentOption', type: PaymentType, value: string, name: string, instructions: string }> | null | undefined } };
 
 
 export const StoreDocument = gql`
     query Store($storeFromSlugSlug: String!) {
   storeFromSlug(slug: $storeFromSlugSlug) {
+    __typename
     ... on Store {
       name
       currency {
@@ -732,7 +754,8 @@ export const StoreDocument = gql`
         }
       }
       deliveryOptions {
-        type
+        fulfillment
+        payment
         instructions
         name
         cost

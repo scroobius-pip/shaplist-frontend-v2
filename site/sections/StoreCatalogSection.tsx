@@ -30,7 +30,12 @@ function StoreCatalog(props: Props) {
             <List>
               {
                 data.list.map(product =>
-                  <ProductCard key={product.id} onClick={() => router.push(`#details?id=${product.id}`)} />
+                  <ProductCard
+                    key={product.id}
+                    currency={props.store.currency as any}
+                    product={product}
+                    onClick={() => router.push(`#details?id=${product.id}`)}
+                  />
                 )
               }
               <CartButton

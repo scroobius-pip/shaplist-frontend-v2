@@ -1,5 +1,6 @@
 query Store($storeFromSlugSlug: String!) {
   storeFromSlug(slug: $storeFromSlugSlug) {
+    __typename
     ... on Store {
       name
       currency {
@@ -65,7 +66,8 @@ query Store($storeFromSlugSlug: String!) {
         }
       }
       deliveryOptions {
-        type
+        fulfillment
+        payment
         instructions
         name
         cost

@@ -41,7 +41,6 @@ function useSteps(startPage = 0, styles = {}) {
         </>
     }
 
-
     return {
         Steps: StepsContainer,
         back,

@@ -5,6 +5,8 @@ import CartButton from 'components/CartButton'
 import { useRouter } from 'next/dist/client/router';
 import { SectionProps } from 'sections';
 import theme from 'styles/theme';
+import CartContext from 'context/CartContext'
+import { useContext } from 'react';
 
 interface Props {
   backgroundUrl: string,
@@ -14,6 +16,7 @@ interface Props {
 
 function StoreIntro(props: Props) {
   const router = useRouter()
+  const cart = useContext(CartContext)
   return <Stack
     spacing={2}
     display='flex'
@@ -31,6 +34,7 @@ function StoreIntro(props: Props) {
       <StoreImage url={props.backgroundUrl} />
       <Typography padding={5} textAlign='center' variant='body1'>
         {props.description}
+        {}
       </Typography>
       <Box sx={{
         padding: 2,

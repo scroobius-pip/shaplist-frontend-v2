@@ -5,6 +5,7 @@ import { IncomingMessage } from 'http'
 export default (req: IncomingMessage): Result<string, Error> => {
     const getHostName = fromThrowable(() => {
         const { host } = absoluteUrl(req)
+        console.log('host', host)
         return host
     })
 
