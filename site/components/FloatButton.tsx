@@ -7,7 +7,7 @@ const FloatButton = ({ children }: any) => {
 
         sx={{
             zIndex: 20,
-            marginTop: 5,
+            marginTop: 'auto',
             position: 'sticky',
             width: '100%',
             bottom: 10
