@@ -31,12 +31,12 @@ export type IndexProps = {
 
 
 const Home: NextPage<IndexProps> = ({ store, error }) => {
+  const cart = useCart()
   if (!store) {
     return <Error statusCode={404} title={error} />
   }
 
   const { imageUrl, description, products } = store
-  const cart = useCart()
   return (
     <>
       <Container maxWidth='sm' sx={{
