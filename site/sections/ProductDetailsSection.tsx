@@ -43,7 +43,8 @@ function ProductDetails(props: Props) {
   const submit = () => {
     cart.addUpdateItem({
       additions,
-      optionId: optionName,
+      option: optionName,
+      productName: product?.name ?? '',
       productId: product?.id ?? '',
       quantity
     })

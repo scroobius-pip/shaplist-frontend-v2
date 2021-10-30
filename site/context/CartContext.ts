@@ -1,16 +1,17 @@
 import { err, fromThrowable, ok, Result } from 'neverthrow'
 import React, { useEffect, useState } from 'react'
-interface ProductCartState {
+export interface ProductCartState {
+    productName: string
     productId: string
     quantity: number
-    optionId: string
+    option: string
     additions: string[]
 }
 
 
 interface CartState {
     items: {
-        [cartId: string]: ProductCartState
+        [cartItemId: string]: ProductCartState
     }
     paymentOptionId: string
     deliveryOptionId: string
@@ -27,7 +28,7 @@ export const defaultCartState = {
     paymentOptionId: '',
     deliveryAddress: '',
     phoneNumber: '',
-    fullName: 'simdi',
+    fullName: '',
     email: '',
     instructions: '',
     deliveryOptionId: ''

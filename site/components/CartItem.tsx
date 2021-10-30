@@ -2,10 +2,14 @@ import { DeleteForever, Edit } from '@mui/icons-material'
 import { ListItem, ListItemText, Stack, Typography, Divider, Button, IconButton } from '@mui/material'
 import React from 'react'
 import theme from 'styles/theme'
+import { DProduct } from 'types/types'
 import { QuantitySelect } from './QuantitySelectInput'
 
 interface Props {
-    title?: string
+    name: string
+    option: string
+    additions: string[]
+    price: number
     onClick?: () => any
 }
 
@@ -23,10 +27,10 @@ const CartItem = (props: Props) => {
             }
 
             sx={{ width: '100%', alignItems: 'stretch', justifyContent: 'space-between', backgroundColor: theme.palette.background.paper }}>
-            <ListItemText primary={props?.title ?? 'Basque Burnt Cheesecake'}
+            <ListItemText primary={`${props.name} ${props.option}`}
                 secondary={<>
                     <Typography variant='body2'>
-                        Vanilla Filling + Sprinkles + Jam
+                        {props.additions.join(' + ')}
                     </Typography>
                 </>} />
         </ListItem>
