@@ -1,5 +1,5 @@
 import * as Factory from "factory.ts"
-import { FulfillmentType, StoreQuery, DeliveryPaymentType, DeliveryOption, PaymentOption, PaymentType, ProductStatus } from 'generated/graphql'
+import { FulfillmentType, StoreQuery, DeliveryPaymentType, DeliveryOption, PaymentOption, PaymentType, ProductStatus, ProductAddition, ProductOption } from 'generated/graphql'
 import { DStore, DProduct } from 'types/types'
 import * as faker from 'faker'
 export const StoreQueryFactory = Factory.Sync.makeFactory<DStore>(
@@ -75,6 +75,33 @@ export const StoreQueryFactory = Factory.Sync.makeFactory<DStore>(
                     __typename: 'Price',
                     value: parseFloat(faker.commerce.price())
                 },
+                limitedStock: faker.datatype.boolean() ? {
+                    __typename: 'Stock',
+                    remaining: faker.datatype.number({ max: 20, min: 0 }),
+                    started: faker.datatype.number({ max: 50, min: 20 })
+                } : null,
+                productAdditions: Array.from({ length: faker.datatype.number(4) }, (): ProductAddition => ({
+                    __typename: 'ProductAddition',
+                    name: faker.commerce.productMaterial(),
+                    price: faker.datatype.boolean() ? {
+                        __typename: 'Price',
+                        value: parseFloat(faker.commerce.price()),
+                    } : null,
+
+                })),
+                productOptions: Array.from({ length: faker.datatype.number(4) }, (): ProductOption => ({
+                    __typename: 'ProductOption',
+                    name: faker.commerce.productMaterial(),
+                    price: faker.datatype.boolean() ? {
+                        __typename: 'Price',
+                        value: parseFloat(faker.commerce.price()),
+                    } : null,
+                    imageUrl: faker.datatype.boolean() ? {
+                        full: faker.image.business(),
+                        preview: faker.image.business(50),
+                        __typename: 'ImageUrl'
+                    } : null
+                })),
                 description: faker.commerce.productDescription(),
                 id: faker.lorem.slug(),
                 name: faker.commerce.productName(),

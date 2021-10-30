@@ -72,12 +72,12 @@ export const useCart = () => {
         return (0 | Math.random() * 9e3).toString(36)
     }
 
-    const addUpdateItem = (product: ProductCartState, cartId = createCartId()) => {
+    const addUpdateItem = (product: ProductCartState, cartItemId = createCartId()) => {
         setState({
             ...state,
             items: {
                 ...state.items,
-                [cartId]: product
+                [cartItemId]: product
             }
         })
     }

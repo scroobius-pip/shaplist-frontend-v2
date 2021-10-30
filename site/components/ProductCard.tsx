@@ -3,6 +3,7 @@ import { Currency } from 'generated/graphql';
 import React from 'react';
 import theme from 'styles/theme';
 import { DProduct } from 'types/types';
+import printCurrencyPrice from 'utils/printCurrencyPrice';
 
 
 interface Props {
@@ -38,7 +39,7 @@ export function ProductCard(props: Props) {
             {props.product?.description}
           </Typography>
           {!!props.product?.price && <Typography component='h2' variant='subtitle1'>
-            {`${props.currency.symbol}${props.product.price?.value}`}
+            {printCurrencyPrice(props.currency.symbol, props.product?.price.value)}
           </Typography>}
         </>} />
       </ListItem>
