@@ -1,4 +1,4 @@
 
-export default (symbol: string | undefined | null, price: number | undefined | null) => {
-    return !price ? 'FREE' : `${symbol}${price}`
+export default (symbol: string | undefined | null, price: number | undefined | null, fallbackText = 'FREE') => {
+    return !price ? fallbackText : `${symbol}${price}`
 }

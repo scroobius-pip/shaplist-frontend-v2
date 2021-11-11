@@ -12,27 +12,31 @@ import ComponentWithError from 'components/ComponentWithError'
 import theme from 'styles/theme';
 import Error from 'next/error'
 import printCurrencyPrice from 'utils/printCurrencyPrice';
-
+import { DProduct, DStore } from 'types/types';
+import { err, ok, Result } from 'neverthrow'
 interface Props {
   hash: string
   data?: { id: string }
 }
 
-function ProductDetails(props: Props) {
+interface ProductDetailsProps {
+  product: DProduct
+  store?: DStore
+}
+
+function ProductDetails({ product, store }: ProductDetailsProps) {
 
   const router = useRouter()
   const cart = React.useContext(CartContext)
-  const store = React.useContext(StoreContext)
-  const product = store.store?.products?.__typename === 'ProductList' ?
-    store.store?.products.list.find(p =>
-      props.data?.id === p.id) : null
-  const [optionName, setOptionName] = useState<string>(product?.productOptions?.[0]?.name ?? '')
-  const [additions, setAdditions] = useState<string[]>(product?.productAdditions?.length ? [product?.productAdditions?.[0].name] : [])
+
+  const initialOptionName = product?.productOptions?.[0]?.name ?? ''
+  const [optionName, setOptionName] = useState<string>(initialOptionName)
+
+  const initialAdditions = product?.productAdditions?.length ? [product?.productAdditions?.[0].name] : []
+  const [additions, setAdditions] = useState<string[]>(initialAdditions)
+
   const [quantity, setQuantity] = useState<number>(1)
 
-  if (store && !product) {
-    return <Error statusCode={404} title='Product not found' />
-  }
 
   const checkValid = () => {
     const optionValid = product?.productOptions?.length ? optionName.length >= 1 : true
@@ -40,13 +44,27 @@ function ProductDetails(props: Props) {
     return optionValid && quantityValid
   }
 
+  const calculateUnitPrice = (): number => {
+    //get current option price or fallback to product price
+    const optionPrice = ((product?.productOptions ?? []).find(o => o.name === optionName)?.price?.value ?? 0) ?? product?.price?.value ?? 0
+    // get all additions price or fallback to 0
+    const additionPrice = additions.reduce((acc, curr) => {
+      const addition = product?.productAdditions?.find(a => a.name === curr)
+      return acc + (addition?.price?.value ?? 0)
+    }, 0)
+
+    return (optionPrice + additionPrice)
+
+  }
+
   const submit = () => {
     cart.addUpdateItem({
       additions,
       option: optionName,
-      productName: product?.name ?? '',
-      productId: product?.id ?? '',
-      quantity
+      productName: product.name,
+      productId: product.id,
+      quantity,
+      unitPrice: calculateUnitPrice()
     })
     resetValues()
     router.push('#catalog')
@@ -57,7 +75,6 @@ function ProductDetails(props: Props) {
     setAdditions([])
     setOptionName('')
   }
-
 
 
   return <Stack
@@ -71,15 +88,17 @@ function ProductDetails(props: Props) {
     >
       <Stack
         height='100%'
-        // gap={2}
         marginTop='auto'
       >
-        {!!product?.imageUrl?.length && <img style={{
-          marginTop: 10,
-          aspectRatio: '1/1',
-          objectFit: 'cover',
-          borderRadius: 10
-        }} alt={product?.name} width='100%' src={product?.imageUrl?.[0]?.full} />}
+        {
+          !!product?.imageUrl?.length && <img style={{
+            marginTop: 10,
+            aspectRatio: '1/1',
+            objectFit: 'cover',
+            borderRadius: 10
+          }} alt={product?.name} width='100%' src={product?.imageUrl?.[0]?.full}
+          />
+        }
 
         <Typography gutterBottom variant='h6' marginTop={2} textAlign='center' component='h1'>
           {product?.name}
@@ -96,7 +115,7 @@ function ProductDetails(props: Props) {
               options={product?.productOptions?.map(option => ({
                 text: option.name,
                 value: option.name,
-                additionalText: printCurrencyPrice(store.store?.currency?.symbol, option.price?.value)
+                additionalText: printCurrencyPrice(store?.currency?.symbol, option.price?.value)
               }))}
               onChange={value => setOptionName(value)}
             />
@@ -107,13 +126,12 @@ function ProductDetails(props: Props) {
         !!product?.productAdditions?.length &&
         <Section headingStyle={{ variant: 'h6', component: 'h2' }} heading='Additions'>
           <>
-
             <SelectInput
               value={additions}
               options={product?.productAdditions.map(addition => ({
                 text: addition.name,
                 value: addition.name,
-                additionalText: printCurrencyPrice(store.store?.currency?.symbol, addition.price?.value)
+                additionalText: printCurrencyPrice(store?.currency?.symbol, addition.price?.value)
               }))}
               onChange={additions => setAdditions(additions)}
             />
@@ -136,5 +154,40 @@ function ProductDetails(props: Props) {
 
 }
 
-export default ProductDetails
+
+
+
+const ProductPropsGetter = (props: Props) => {
+  const { store } = React.useContext(StoreContext)
+
+
+  const getProductListFromStore = (store?: DStore): Result<DProduct[], string> => {
+    if (store?.products?.__typename !== 'ProductList') {
+      return err('Unable to get product list')
+    } else {
+      return ok(store?.products.list)
+    }
+  }
+
+  const findProductFromList = (id?: string) => (productList: DProduct[],): Result<DProduct, string> => {
+    const product = productList.find(p =>
+      id === p.id)
+    return product ? ok(product) : err('Product not found')
+  }
+
+
+  return getProductListFromStore(store)
+    .andThen(findProductFromList(props.data?.id))
+    .match(product => {
+      return <ProductDetails
+        product={product}
+        store={store}
+      />
+    }, errorMessage => {
+      return <Error statusCode={404} title={errorMessage} />
+    })
+
+}
+
+export default ProductPropsGetter
 

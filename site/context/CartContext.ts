@@ -5,6 +5,7 @@ export interface ProductCartState {
     productId: string
     quantity: number
     option: string
+    unitPrice: number
     additions: string[]
 }
 
@@ -47,7 +48,7 @@ const getCartString = (): Result<string, null> => {
 }
 
 const setCartString = (cartString: string): Result<void, null> => {
-    return fromThrowable(window?.localStorage.setItem, _ => null)('cart', cartString)
+    return fromThrowable(() => window?.localStorage.setItem('cart', cartString), _ => null)()
 }
 
 const cartToString = (cart: CartState): Result<string, null> => {
@@ -65,15 +66,22 @@ export const useCart = () => {
     }, [])
 
     useEffect(() => {
+      
         cartToString(state)
+        .map(cartString=>{console.log(cartString);return cartString})
             .andThen(setCartString)
     }, [state])
 
-    const createCartId = () => {
-        return (0 | Math.random() * 9e3).toString(36)
+    const createCartId = (product: ProductCartState) => {
+        // return (0 | Math.random() * 9e3).toString(36)
+        const { additions, productId, option } = product
+        return `${productId}${option}${additions.join('')}`
     }
 
-    const addUpdateItem = (product: ProductCartState, cartItemId = createCartId()) => {
+    const addUpdateItem = (product: ProductCartState, cartItemId?: string) => {
+        //nullish assignment operator
+        cartItemId ??= createCartId(product)
+
         setState({
             ...state,
             items: {

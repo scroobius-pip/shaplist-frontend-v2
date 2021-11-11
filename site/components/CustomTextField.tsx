@@ -9,7 +9,7 @@ const StyledTextField = styled(OutlinedInput)(({ theme, multiline }) => ({
     minHeight: multiline ? 100 : 'initial',
 
     borderRadius: theme.shape.borderRadius,
-    fontWeight: 600,
+
     padding: '16.5px 14px'
   },
   '& .MuiOutlinedInput-notchedOutline': {

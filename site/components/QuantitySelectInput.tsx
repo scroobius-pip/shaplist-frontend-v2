@@ -7,23 +7,24 @@ import theme from 'styles/theme';
 interface Props {
   value: number
   onChange: (value: number) => any
+  size?: 'small' | 'large'
 }
 
 export function QuantitySelect(props: Props) {
   return (<Box sx={{
     backgroundColor: theme.palette.background.paper
   }} width='100%' display='flex'>
-    <IconButton onClick={() => props.value > 1 && props.onChange(props.value - 1)} size='large'>
+    <IconButton onClick={() => props.value > 1 && props.onChange(props.value - 1)} size={props?.size ?? 'large'}>
       <Remove />
     </IconButton>
     <CustomTextField
-      sx={{ fontSize: 18 }}
+      // sx={{ fontSize: 14 }}
       value={props.value}
       onChange={({ target: { value } }) => props.onChange(+value > 0 ? +value : 1)}
       type='number' />
     <IconButton
       onClick={() => props.onChange(props.value + 1)}
-      size='large'>
+      size={props?.size ?? 'large'}>
       <Add />
     </IconButton>
   </Box>);

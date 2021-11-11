@@ -40,7 +40,8 @@ export function ProductCard(props: Props) {
           </Typography>
           {!!props.product?.price && <Typography component='h2' variant='subtitle1'>
             {printCurrencyPrice(props.currency.symbol, props.product?.price.value)}
-          </Typography>}
+          </Typography>
+          }
         </>} />
       </ListItem>
       {/* <Divider variant="middle" component="li" /> */}

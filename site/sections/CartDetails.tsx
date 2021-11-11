@@ -3,12 +3,15 @@ import CartButton from 'components/CartButton'
 import CartItem from 'components/CartItem'
 import Section from 'components/Section'
 import CartContext from 'context/CartContext'
+import StoreContext from 'context/StoreContext'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
+import printCurrencyPrice from 'utils/printCurrencyPrice'
 
 const CartDetails = (props: { hash: string }) => {
     const router = useRouter()
     const cart = React.useContext(CartContext)
+    const { store } = React.useContext(StoreContext)
 
     return <Stack height='100%'  >
         <Section
@@ -23,9 +26,20 @@ const CartDetails = (props: { hash: string }) => {
                             additions={cartItem.additions}
                             name={cartItem.productName}
                             option={cartItem.option}
-                            price={300}
+                            price={printCurrencyPrice(store?.currency?.symbol, cartItem.unitPrice * cartItem.quantity)}
                             key={cartItemId}
-                            onClick={() => router.push(`#edit?id=${cartItemId}`)}
+                            quantity={cartItem.quantity}
+                            onRemove={() => cart.deleteItem(cartItemId)}
+                            onQuantityChange={(quantity) => {
+                                if (quantity <= 0) {
+                                    cart.deleteItem(cartItemId)
+                                } else {
+                                    cart.addUpdateItem({
+                                        ...cartItem,
+                                        quantity
+                                    }, cartItemId)
+                                }
+                            }}
                         />
                     })
                 }
