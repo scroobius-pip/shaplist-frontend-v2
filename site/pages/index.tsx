@@ -76,50 +76,50 @@ const Home: NextPage<IndexProps> = ({ store, error }) => {
 
 export const getServerSideProps: GetServerSideProps<IndexProps> = async (context) => {
 
-  return {
-    props: {
-      store: StoreQueryFactory.build()
-    }
-  }
-
-  // const getStoreInfo = getStoreSlug(context.req)
-  //   .mapErr(e => e.message)
-  //   .asyncAndThen(storeSlug => {
-  //     const client = new GraphQLClient('https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql')
-  //     const sdk = getSdk(client)
-  //     const storeQueryResult = fromPromise(sdk.Store({ storeFromSlugSlug: storeSlug }), _ => _?.message ?? 'Failed to get store')
-  //     return storeQueryResult
-  //   })
-  //   .andThen<IndexProps['store'], string>(storeQueryResult => {
-  //     console.log(storeQueryResult)
-  //     switch (storeQueryResult.storeFromSlug?.__typename) {
-  //       case 'Store':
-  //         return ok(storeQueryResult.storeFromSlug)
-  //       case 'Error':
-  //         return err(storeQueryResult.storeFromSlug.message)
-  //       default:
-  //         return err('Unknown Error Occurred')
-  //     }
-  //   })
-  //   .match<IndexProps>(result => {
-  //     return {
-  //       store: result
-  //     }
-  //   }, error => {
-
-  //     return {
-  //       error
-  //     }
-  //   })
-
-
-
-
   // return {
   //   props: {
-  //     ...await getStoreInfo
+  //     store: StoreQueryFactory.build()
   //   }
   // }
+
+  const getStoreInfo = getStoreSlug(context.req)
+    .mapErr(e => e.message)
+    .asyncAndThen(storeSlug => {
+      const client = new GraphQLClient('https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql')
+      const sdk = getSdk(client)
+      const storeQueryResult = fromPromise(sdk.Store({ storeFromSlugSlug: storeSlug }), (_: any) => _?.message ?? 'Failed to get store')
+      return storeQueryResult
+    })
+    .andThen<IndexProps['store'], string>(storeQueryResult => {
+      console.log(storeQueryResult)
+      switch (storeQueryResult.storeFromSlug?.__typename) {
+        case 'Store':
+          return ok(storeQueryResult.storeFromSlug)
+        case 'Error':
+          return err(storeQueryResult.storeFromSlug.message)
+        default:
+          return err('Unknown Error Occurred')
+      }
+    })
+    .match<IndexProps>(result => {
+      return {
+        store: result
+      }
+    }, error => {
+
+      return {
+        error
+      }
+    })
+
+
+
+
+  return {
+    props: {
+      ...await getStoreInfo
+    }
+  }
 }
 
 export default Home
