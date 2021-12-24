@@ -5,35 +5,23 @@ import Section from 'components/Section';
 import { ChevronRight } from '@mui/icons-material';
 import CustomButton from 'components/CustomButton';
 import router from 'next/dist/client/router';
-
-
-const options = [
-    {
-        text: 'Katampe Extension',
-        price: '+500 NGN',
-        value: 'card'
-    },
-    {
-        text: 'Gwarinpa Estate',
-        price: '+200 NGN',
-        value: 'bank'
-    },
-    {
-        text: 'Maitama',
-        price: '+1500 NGN',
-        value: 'delivery'
-    },
-    {
-        text: 'Pickup (free)',
-        price: 'FREE',
-        value: 'pickup'
-    }
-]
+import StoreContext from 'context/StoreContext'
+import CartContext from 'context/CartContext'
+import printCurrencyPrice from 'utils/printCurrencyPrice';
+import { FulfillmentType } from 'generated/graphql';
 
 
 
 function DeliverySelect(props: { hash: string }) {
-    const [option, setOption] = React.useState(options[0].value)
+    const { store, } = React.useContext(StoreContext)
+    const { state, updateDetail } = React.useContext(CartContext)
+    const deliveryOptions = store?.deliveryOptions || []
+    const [option, setOption] = React.useState(deliveryOptions[0])
+
+    const onSubmit = () => {
+        updateDetail('deliveryOptionId', option.name)
+        router.push(option.fulfillment === FulfillmentType.Pickup ? '#contact' : '#address')
+    }
     return (
         <Section
             heading='Select a delivery option'
@@ -41,14 +29,14 @@ function DeliverySelect(props: { hash: string }) {
 
         >
             <Stack gap={2}>
-
                 <OptionInput
                     value={option}
-                    options={options} onChange={setOption}
+                    options={deliveryOptions.map(option => ({ text: option.name, value: option, additionalText: printCurrencyPrice(store?.currency?.symbol, option.cost) }))}
+                    onChange={setOption}
                 />
 
                 <CustomButton
-                    onClick={() => router.push('#address')}
+                    onClick={onSubmit}
                     icon={<ChevronRight />}
                 >
                     Continue

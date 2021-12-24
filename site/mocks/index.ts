@@ -23,14 +23,14 @@ export const StoreQueryFactory = Factory.Sync.makeFactory<DStore>(
             {
                 fulfillment: FulfillmentType.Pickup,
                 __typename: 'DeliveryOption',
-                name: faker.random.arrayElement(['Pickup', `Pickup at ${faker.address.streetAddress}`]),
+                name: faker.random.arrayElement(['Pickup', `Pickup at ${faker.address.streetAddress()}`]),
                 payment: faker.random.arrayElement([DeliveryPaymentType.Quote, DeliveryPaymentType.SetPrice]),
                 cost: parseFloat(faker.finance.amount())
             },
             {
                 fulfillment: FulfillmentType.Delivery,
                 __typename: 'DeliveryOption',
-                name: `Delivery to ${faker.address.streetAddress}`,
+                name: `Delivery to ${faker.address.streetAddress()}`,
                 payment: DeliveryPaymentType.SetPrice,
                 cost: parseFloat(faker.finance.amount())
             },

@@ -6,6 +6,7 @@ import CustomButton from 'components/CustomButton';
 import { ChevronRight } from '@mui/icons-material';
 import { Box } from '@mui/system';
 import { useRouter } from 'next/dist/client/router';
+import CartContext from 'context/CartContext';
 
 
 const options = [
@@ -25,8 +26,10 @@ const options = [
 
 
 function PaymentSelect(props: { hash: string }) {
-  const [option, setOption] = React.useState(options[0].value)
+
   const router = useRouter()
+  const { updateDetail, state } = React.useContext(CartContext)
+
   return (<Section
     heading='How would you like to pay ?'
     headingStyle={{ component: 'h1', variant: 'h5' }}
@@ -34,8 +37,8 @@ function PaymentSelect(props: { hash: string }) {
     <Stack gap={2}>
 
       <OptionInput
-        value={option}
-        options={options} onChange={setOption}
+        value={state.deliveryOptionId}
+        options={options} onChange={(option) => updateDetail('deliveryOptionId', option)}
       />
 
       <CustomButton

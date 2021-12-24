@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql'
+schema: 'https://shaplist-api-simdi-jinkins.vercel.app/api'
 documents: 'graphql/**/*.graphql'
 generates:
   generated/graphql.ts:

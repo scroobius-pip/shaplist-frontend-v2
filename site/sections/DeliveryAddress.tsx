@@ -5,9 +5,11 @@ import CustomButton from 'components/CustomButton'
 import React from 'react'
 import { ChevronRight } from '@mui/icons-material';
 import { useRouter } from 'next/dist/client/router';
+import CartContext from 'context/CartContext'
 
 const DeliveryAddress = (props: { hash: string }) => {
     const router = useRouter()
+    const { state, updateDetail } = React.useContext(CartContext)
 
     return <Section
         heading='What’s the delivery address ?'
@@ -18,6 +20,8 @@ const DeliveryAddress = (props: { hash: string }) => {
 
             <CustomTextField
                 placeholder='Street No, house No, nearest landmarks'
+                value={state.deliveryAddress}
+                onChange={e => updateDetail('deliveryAddress', e.target.value)}
             />
             <CustomButton
                 onClick={() => router.push('#contact')}

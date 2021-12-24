@@ -1,7 +1,7 @@
 import { Button, Container, ButtonGroup } from '@mui/material'
 import type { GetServerSideProps, NextPage } from 'next'
 import StoreIntro from 'sections/StoreIntroSection'
-import React from 'react'
+import React, { useEffect } from 'react'
 import StoreCatalog from 'sections/StoreCatalogSection'
 import ProductDetails from 'sections/ProductDetailsSection'
 import PaymentSelect from 'sections/PaymentSelectSection'
@@ -30,13 +30,18 @@ export type IndexProps = {
 
 
 
-const Home: NextPage<IndexProps> = ({ store, error }) => {
+const Home: NextPage<IndexProps> = ({ error, store }) => {
   const cart = useCart()
+  // const [store, setStore] = React.useState<DStore>()
+  // useEffect(() => {
+  //   setStore(StoreQueryFactory.build())
+  // }, [])
+
   if (!store) {
     return <Error statusCode={404} title={error} />
   }
 
-  const { imageUrl, description, products } = store
+  const { imageUrl, description } = store
   return (
     <>
       <Container maxWidth='sm' sx={{
@@ -66,13 +71,14 @@ const Home: NextPage<IndexProps> = ({ store, error }) => {
               <Instructions hash='instructions' />
             </SectionRouter>
           </CartContext.Provider>
-
         </StoreContext.Provider>
       </Container>
     </>
   )
 }
 
+//simulate delay
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const getServerSideProps: GetServerSideProps<IndexProps> = async (context) => {
 
@@ -82,12 +88,13 @@ export const getServerSideProps: GetServerSideProps<IndexProps> = async (context
   //   }
   // }
 
+
   const getStoreInfo = getStoreSlug(context.req)
     .mapErr(e => e.message)
     .asyncAndThen(storeSlug => {
-      const client = new GraphQLClient('https://yslrnf1myk.execute-api.us-east-1.amazonaws.com/dev/graphql')
+      const client = new GraphQLClient('https://shaplist-api-simdi-jinkins.vercel.app/api')
       const sdk = getSdk(client)
-      const storeQueryResult = fromPromise(sdk.Store({ storeFromSlugSlug: storeSlug }), (_: any) => _?.message ?? 'Failed to get store')
+      const storeQueryResult = fromPromise(sdk.Store({ storeFromSlugSlug: 'test1' }), (_: any) => _?.message ?? 'Failed to get store')
       return storeQueryResult
     })
     .andThen<IndexProps['store'], string>(storeQueryResult => {

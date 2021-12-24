@@ -3,7 +3,7 @@ import { ListItem, ListItemText, Stack, Typography, Divider, Button, IconButton,
 import React from 'react'
 import theme from 'styles/theme'
 import { DProduct } from 'types/types'
-import { QuantitySelect } from './QuantitySelectInput'
+import { CartItemQuantitySelect, QuantitySelect } from './QuantitySelectInput'
 
 interface Props {
     name: string
@@ -16,7 +16,7 @@ interface Props {
 }
 
 const CartItem = (props: Props) => {
-    return <>
+    return <Box sx={{ backgroundColor: theme.palette.background.paper }}>
 
         <ListItem
             // onClick={props?.onClick}
@@ -32,7 +32,7 @@ const CartItem = (props: Props) => {
                 width: '100%',
                 alignItems: 'stretch',
                 justifyContent: 'space-between',
-                backgroundColor: theme.palette.background.paper
+                // backgroundColor: theme.palette.background.paper
             }}>
             <ListItemText primary={`${props.name} ${props.option}`}
                 secondary={<>
@@ -42,23 +42,24 @@ const CartItem = (props: Props) => {
                 </>} />
         </ListItem>
         <Box sx={{
-            backgroundColor: theme.palette.background.paper,
+            // backgroundColor: theme.palette.background.paper,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'end'
         }}
             width='100%'
             paddingX={1}>
-            <QuantitySelect
+            <CartItemQuantitySelect
                 onChange={props.onQuantityChange}
                 value={props.quantity}
-                size='small'
+
             />
-            <Button onClick={props.onRemove} variant="text">Delete</Button>
+            <Button onClick={props.onRemove} color='warning' variant="text">Delete</Button>
 
         </Box>
         <Divider variant="fullWidth" component="li" />
-    </>
+    </Box>
 }
+
 
 export default CartItem

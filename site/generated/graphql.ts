@@ -373,7 +373,6 @@ export type MutationDeleteProductArgs = {
 
 export type MutationUpdateCartArgs = {
   cart: CartInput;
-  cartId: Scalars['ID'];
   storeId: Scalars['ID'];
 };
 
@@ -473,7 +472,7 @@ export type Price = {
 };
 
 export type PriceInput = {
-  value: Scalars['Float'];
+  price_value: Scalars['Float'];
 };
 
 export type Product = {
@@ -712,6 +711,7 @@ export const StoreDocument = gql`
         phone_number
       }
       products {
+        __typename
         ... on ProductList {
           list {
             id

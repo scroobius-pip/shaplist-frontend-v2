@@ -24,6 +24,7 @@ query Store($storeFromSlugSlug: String!) {
         phone_number
       }
       products {
+        __typename
         ... on ProductList {
           list {
             id

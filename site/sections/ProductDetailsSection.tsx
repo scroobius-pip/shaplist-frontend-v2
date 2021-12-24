@@ -25,7 +25,7 @@ interface ProductDetailsProps {
 }
 
 function ProductDetails({ product, store }: ProductDetailsProps) {
-
+  console.log(product)
   const router = useRouter()
   const cart = React.useContext(CartContext)
 
@@ -46,7 +46,8 @@ function ProductDetails({ product, store }: ProductDetailsProps) {
 
   const calculateUnitPrice = (): number => {
     //get current option price or fallback to product price
-    const optionPrice = ((product?.productOptions ?? []).find(o => o.name === optionName)?.price?.value ?? 0) ?? product?.price?.value ?? 0
+    const optionPrice = ((product?.productOptions ?? []).find(o => o.name === optionName)?.price?.value ?? 0) || product?.price?.value || 0
+
     // get all additions price or fallback to 0
     const additionPrice = additions.reduce((acc, curr) => {
       const addition = product?.productAdditions?.find(a => a.name === curr)

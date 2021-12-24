@@ -18,12 +18,19 @@ const ContactDetails = (props: { hash: string }) => {
         <Stack gap={5}>
 
             <Stack gap={1}>
-                <CustomTextField type='phone' placeholder="What's your phone number ?" />
+                <CustomTextField
+                    value={cart.state.phoneNumber}
+                    onChange={(e) => cart.updateDetail('phoneNumber', e.target.value)}
+                    type='phone' placeholder="What's your phone number ?" />
                 <CustomTextField value={cart.state.fullName} onChange={(e) => {
                     cart.updateDetail('fullName', e.target.value)
                 }} placeholder="What's your full name ?" />
-                <CustomTextField type='mail' placeholder="What's your email ?" />
-
+                <CustomTextField
+                    type='mail'
+                    placeholder="What's your email ?"
+                    value={cart.state.email}
+                    onChange={e => cart.updateDetail('email', e.target.value)}
+                />
             </Stack>
             <CustomButton
                 onClick={() => router.push('#instructions')}
